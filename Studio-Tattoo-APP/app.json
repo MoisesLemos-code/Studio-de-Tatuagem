@@ -11,8 +11,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "xhdpi": "./src/img/splash_screen.png",
+      "xxhdpi": "./src/img/splash_screen.png",
+      "xxxhdpi": "./src/img/splash_screen.png",
       "backgroundColor": "#ffffff"
     },
     "updates": {

@@ -36,7 +36,6 @@ export default class Cliente extends Component {
     try {
       const response = await api.get(`/cliente/list`);
       this.setState({ list: response.data });
-      console.log("teste lista")
     } catch (err) {
       console.log(err)
     }

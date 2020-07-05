@@ -3,8 +3,12 @@ import {
   View, Text, StyleSheet,
   TouchableOpacity, TextInput, Alert, Modal
 } from 'react-native'
+import { Avatar } from 'react-native-paper';
+import avatarImg from './../../img/avatar.png'
 
 import api from "../../services/api"
+
+//import avatar from '../../img/avatar.png'
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -62,8 +66,35 @@ export default class ModalCard extends Component {
 
   excluirCliente = async () => {
     try {
-      await api.delete(`/cliente/delete/${this.state.id}`);
-      this.props.deleteItem()
+      Alert.alert(
+        'Atenção!',
+        'Deseja realmente excluir este registro?',
+        [
+          {
+            text: 'Cancelar',
+            onPress: () => { },
+            style: 'cancel'
+          },
+          {
+            text: 'OK',
+            onPress: async () => {
+              const resposta = await api.delete(`/cliente/delete/${this.state.id}`);
+              if (resposta.data.status === 505) {
+                Alert.alert(
+                  "Falha!",
+                  resposta.data.mensagem,
+                  [
+                    { text: "OK" }
+                  ],
+                  { cancelable: false }
+                )
+              }
+              this.props.deleteItem()
+            }
+          },
+        ],
+        { cancelable: false },
+      );
     } catch (err) {
       console.log(err)
       Alert.alert(
@@ -83,9 +114,10 @@ export default class ModalCard extends Component {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={() => this.props.modalHandle()}
+        visible={this.props.modalHandle}
       >
         <View style={styles.centeredView}>
+          <Avatar.Image source={avatarImg} size={150} style={styles.picture} />
           <View style={styles.modalView}>
             <TouchableOpacity
               style={styles.closeButton}
@@ -95,7 +127,6 @@ export default class ModalCard extends Component {
             </TouchableOpacity>
             <Text style={styles.textInputBody}>Nome</Text>
             <TextInput
-              autoFocus={true}
               style={styles.input}
               placeholder="Digite o nome"
               type={'name'}
@@ -146,9 +177,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    alignContent: 'center',
+  },
+  picture: {
+    position: 'relative',
+    top: 50,
+    elevation: 5,
+    zIndex: 1
   },
   modalView: {
+    zIndex: 0,
     backgroundColor: "white",
     borderRadius: 20,
     width: '90%',
@@ -189,7 +227,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '30%',
     elevation: 2,
-    backgroundColor: '#667581',
+    backgroundColor: '#1E2125',
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#fff'
@@ -201,5 +239,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingLeft: 10,
     paddingRight: 10
-  },
+  }
 });
