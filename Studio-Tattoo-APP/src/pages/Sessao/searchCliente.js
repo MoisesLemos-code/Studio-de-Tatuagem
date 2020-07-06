@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import {
   View, Text, StyleSheet,
-  TouchableOpacity, Alert, Modal
+  TouchableOpacity, Alert, Modal, TextInput, FlatList
 } from 'react-native'
-import { SearchBar, ListItem } from 'react-native-elements';
 import { Avatar } from 'react-native-paper';
 import avatarImg from './../../img/avatar.png'
 
@@ -23,7 +22,11 @@ export default class SearchCliente extends Component {
       endereco: '',
       email: '',
     },
-    nomeDigitado: ''
+    nomeDigitado: '',
+    page: 1,
+    seed: 1,
+    refreshing: false,
+    loading: false
   }
 
   constructor(props) {
@@ -39,24 +42,28 @@ export default class SearchCliente extends Component {
         endereco: '',
         email: '',
       },
-      nomeDigitado: ''
+      nomeDigitado: '',
+      page: 1,
+      seed: 1,
+      refreshing: false,
+      loading: false
     })
   }
 
-  buscarCliente = async (nome) => {
-    this.setState({ ...this.state, nomeDigitado: nome })
+  buscarCliente = async () => {
     try {
       const res = await api.get(`/cliente/index/nome/${this.state.nomeDigitado}`);
       this.setState({
-        clientes: [res.data]
+        ...this.state,
+        clientes: res.data
       });
-      console.log(this.state.clientes)
     } catch (err) {
       console.log(err)
     }
   }
+
   selecionarCliente = () => {
-    if (clienteSelecionado.id == 0) {
+    if (this.state.clienteSelecionado.id == 0) {
       Alert.alert(
         "Atenção!",
         "Selecione algum cliente!",
@@ -65,7 +72,45 @@ export default class SearchCliente extends Component {
         ],
         { cancelable: false }
       )
+    } else {
+      this.props.clienteSearch(this.state.clienteSelecionado)
+      this.props.hideModal()
     }
+  }
+
+  renderSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 10,
+          width: "86%",
+          marginLeft: "14%"
+        }}
+      />
+    );
+  }
+
+  handleRefresh = () => {
+    this.setState({
+      page: 1,
+      refreshing: true,
+      seed: this.state.seed + 1
+    }, () => {
+      this.buscarCliente();
+    })
+  }
+
+  itemList = (item) => {
+    return (
+      <TouchableOpacity style={styles.itemList}
+        onPress={() => this.setState({ ...this.state, clienteSelecionado: item })}>
+        <Avatar.Image source={avatarImg} size={70} style={styles.listPicture} />
+        <View style={styles.itemListBody}>
+          <Text style={styles.itemListNome}>{item.nome}</Text>
+          <Text style={styles.itemListEmail}>{item.email}</Text>
+        </View>
+      </TouchableOpacity>
+    );
   }
 
   render() {
@@ -85,28 +130,34 @@ export default class SearchCliente extends Component {
             >
               <MaterialCommunityIcons name={'close-circle-outline'} size={28} color={'#353434'} />
             </TouchableOpacity>
-            <SearchBar
-              placeholder="Digite o nome..."
-              onChangeText={nome => this.buscarCliente(nome)}
-              value={this.state.nomeDigitado}
-              containerStyle={styles.searchBarContainer}
-              inputStyle={styles.searchBarInput}
-              placeholderTextColor='#121212'
-              inputContainerStyle={styles.searchBarInputContainer}
-            />
-            <View>
-              {
-                this.state.clientes.map((obj, i) => (
-                  <ListItem
-                    style={{ backgroundColor: 'red' }}
-                    key={i}
-                    title={obj.nome}
-                    titleStyle={{ color: '#121212' }}
-                    subtitle={obj.email}
-                    bottomDivider
-                  />
-                ))
-              }
+            <View style={styles.containerInput}>
+              <TextInput
+                style={styles.input}
+                placeholder="Digite o nome..."
+                placeholderTextColor="#00000f"
+                onChangeText={nome => this.setState({ ...this.state, nomeDigitado: nome })}
+                value={this.state.nomeDigitado}
+              />
+              <TouchableOpacity
+                style={styles.btnInput}
+                onPress={this.buscarCliente}
+              >
+                <Text style={styles.btnText}>Buscar</Text>
+                <MaterialCommunityIcons name={'find-replace'} size={28} color={'#FFF'} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.listBox}>
+              <FlatList
+                contentContainerStyle={styles.listView}
+                data={this.state.clientes}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={
+                  ({ item }) => this.itemList(item)
+                }
+                ItemSeparatorComponent={this.renderSeparator}
+                refreshing={this.state.refreshing}
+                onRefresh={this.handleRefresh}
+              />
             </View>
             <View style={styles.bodyButtons}>
               <TouchableOpacity
@@ -161,18 +212,33 @@ const styles = StyleSheet.create({
   closeButton: {
     width: 40
   },
-  searchBarContainer: {
+  containerInput: {
     marginTop: 20,
-    backgroundColor: '#fff',
-    borderRadius: 10
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
-  searchBarInput: {
-    borderRadius: 5,
-    color: '#121212'
-  },
-  searchBarInputContainer: {
+  input: {
+    height: 50,
+    width: 200,
+    paddingStart: 5,
     backgroundColor: '#ccc',
-    borderRadius: 10
+    borderColor: '#00000F',
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+  },
+  inputText: {
+    color: '#00000F',
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+  btnInput: {
+    flexDirection: 'row',
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+    width: 90,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1E2125'
   },
   bodyButtons: {
     paddingTop: 20,
@@ -195,7 +261,37 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: "bold",
     fontSize: 14,
-    paddingLeft: 10,
-    paddingRight: 10
+    marginRight: 5,
+  },
+  listBox: {
+    marginTop: 20,
+    width: '100%',
+    height: 130,
+    padding: 5,
+    borderWidth: 1,
+    borderColor: "#CED0CE",
+    borderRadius: 5
+  },
+  itemList: {
+    flexDirection: 'row',
+    height: 100,
+    backgroundColor: '#121212',
+    borderRadius: 10
+  },
+  listPicture: {
+    margin: 5
+  },
+  itemListBody: {
+    flexDirection: 'column'
+  },
+  itemListNome: {
+    color: '#fff',
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+  itemListEmail: {
+    color: '#D4D7DB',
+    fontWeight: "bold",
+    fontSize: 14,
   }
 });

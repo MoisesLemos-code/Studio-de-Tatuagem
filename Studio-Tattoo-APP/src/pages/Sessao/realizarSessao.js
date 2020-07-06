@@ -82,7 +82,7 @@ export default function SessaoCadastro() {
             <SearchCliente
               modalHandle={modal}
               hideModal={() => setModal(false)}
-              clienteSearch={(cliente) => setCliente({ cliente })}
+              clienteSearch={(cliente) => setCliente(cliente)}
             />
             <TouchableOpacity
               style={styles.btnCliente}
