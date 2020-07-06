@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, FlatList, StyleSheet,
+  View, FlatList, StyleSheet, ActivityIndicator
 } from 'react-native'
 import api from "../../services/api"
 
@@ -8,37 +8,74 @@ import CardCliente from '../../components/CardCliente'
 
 export default class Cliente extends Component {
 
-  _isMounted = false;
-
   constructor(props) {
     super(props);
     this.state = {
-      list: []
-    }
-    this.updateList = this.updateList.bind(this);
-  }
-
-  componentDidMount = async () => {
-    this._isMounted = true;
-    try {
-      const response = await api.get(`/cliente/list`);
-      this.setState({ list: response.data });
-    } catch (err) {
-      console.log(err)
+      list: [],
+      page: 1,
+      seed: 1,
+      refreshing: false,
+      loading: false
     }
   }
 
-  componentWillUnmount() {
-    this._isMounted = false;
+  componentDidMount() {
+    this.updateList()
   }
 
   updateList = async () => {
     try {
-      const response = await api.get(`/cliente/list`);
-      this.setState({ list: response.data });
+      const res = await api.get(`/cliente/list`);
+      this.setState({
+        list: res.data || [],
+        loading: false,
+        refreshing: false
+      });
+      console.log(this.state.list)
     } catch (err) {
-      console.log(err)
+      this.setState({
+        loading: false,
+        refreshing: false
+      })
     }
+  }
+
+  handleRefresh = () => {
+    this.setState({
+      page: 1,
+      refreshing: true,
+      seed: this.state.seed + 1
+    }, () => {
+      this.updateList();
+    })
+  }
+
+  renderSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 10,
+          width: "86%",
+          marginLeft: "14%"
+        }}
+      />
+    );
+  }
+
+  renderFooter = () => {
+    if (!this.state.loading) return null;
+
+    return (
+      <View
+        style={{
+          paddingVertical: 20,
+          borderTopWidth: 1,
+          borderColor: "#CED0CE"
+        }}
+      >
+        <ActivityIndicator animating size="large" />
+      </View>
+    )
   }
 
   render() {
@@ -47,13 +84,16 @@ export default class Cliente extends Component {
         <FlatList
           contentContainerStyle={styles.listView}
           data={this.state.list}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={item => item.id}
           renderItem={
             ({ item }) => <CardCliente
               item={item}
-              onChange={this.updateList}
             />
           }
+          ItemSeparatorComponent={this.renderSeparator}
+          ListFooterComponent={this.renderFooter}
+          refreshing={this.state.refreshing}
+          onRefresh={this.handleRefresh}
         />
       </View>
     )

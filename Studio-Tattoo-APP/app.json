@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "mercado-front",
-    "slug": "mercado-front",
+    "name": "Tattoo-studio",
+    "slug": "Tattoo-studio",
     "platforms": [
       "ios",
       "android",
@@ -11,9 +11,8 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "xhdpi": "./src/img/splash_screen.png",
-      "xxhdpi": "./src/img/splash_screen.png",
-      "xxxhdpi": "./src/img/splash_screen.png",
+      "image": "./src/img/splash_screen.png",
+      "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {

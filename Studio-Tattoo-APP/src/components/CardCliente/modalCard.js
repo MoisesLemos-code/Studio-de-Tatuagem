@@ -8,7 +8,6 @@ import avatarImg from './../../img/avatar.png'
 
 import api from "../../services/api"
 
-//import avatar from '../../img/avatar.png'
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -26,6 +25,14 @@ export default class ModalCard extends Component {
     super(props);
   }
 
+  componentDidMount() {
+    this.setState({
+      nome: this.props.item.nome,
+      endereco: this.props.item.endereco,
+      email: this.props.item.email,
+      id: this.props.item.id,
+    })
+  }
 
   editarCliente = async () => {
     try {

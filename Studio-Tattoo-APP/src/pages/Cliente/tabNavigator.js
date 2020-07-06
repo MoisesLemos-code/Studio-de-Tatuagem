@@ -21,14 +21,14 @@ export default function TabNavigator() {
         options={{
           tabBarLabel: 'Cadastrar cliente',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+            <MaterialCommunityIcons name="account-plus" color={color} size={26} />
           ),
         }} />
       <Tab.Screen name="Lista" component={clienteLista}
         options={{
           tabBarLabel: 'Visualizar cadastros',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+            <MaterialCommunityIcons name="account-search" color={color} size={26} />
           ),
         }} />
     </Tab.Navigator>

@@ -35,12 +35,12 @@ export default class CardCliente extends Component {
 
   updateItem = item => {
     this.setState({ modalVisible: false, item: item })
-    this.props.onChange();
+    //  this.props.onChange();
   }
 
   deleteItem = () => {
     this.setState({ ...this.state, modalVisible: false })
-    this.props.onChange();
+    //this.props.onChange();
   }
 
   render() {
@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#1E2125',
     padding: 0,
-    marginVertical: 10,
     minWidth: '95%',
     maxWidth: '95%',
   },
