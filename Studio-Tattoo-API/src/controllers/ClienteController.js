@@ -1,4 +1,5 @@
 const Cliente = require('../models/Cliente')
+const { Op } = require('sequelize');
 
 module.exports = {
   async store(req, res) {
@@ -11,6 +12,21 @@ module.exports = {
     const obj = await Cliente.findByPk(req.params.id);
 
     return res.json(obj)
+  },
+  async indexNome(req, res) {
+    try {
+      const obj = await Cliente.findAll({
+        where: {
+          nome: {
+            [Op.like]: req.params.nome
+          }
+        },
+      })
+      return res.status(200).json(obj)
+    } catch (err) {
+      console.log(err)
+      return res.json({ status: 505, mensagem: "Não foi possível localizar o cliente!" })
+    }
   },
   async list(req, res) {
     const obj = await Cliente.findAll({

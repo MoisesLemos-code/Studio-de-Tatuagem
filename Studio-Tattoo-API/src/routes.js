@@ -10,6 +10,7 @@ const routes = express.Router();
 routes.post('/cliente/insert', ClienteController.store)
 routes.get('/cliente/list', ClienteController.list)
 routes.get('/cliente/index/:id', ClienteController.index)
+routes.get('/cliente/index/nome/:nome', ClienteController.indexNome)
 routes.put('/cliente/update/:id', ClienteController.update)
 routes.delete('/cliente/delete/:id', ClienteController.destroy)
 
