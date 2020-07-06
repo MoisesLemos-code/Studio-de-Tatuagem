@@ -57,7 +57,7 @@ export default class CardSessao extends Component {
           <View style={styles.dataAbertura}>
             <Text style={styles.textDataAbertura}>
               {Moment(this.state.item.createdAt).format('h:mm a' + " - " + "D MMM YYYY ")}</Text>
-            <MaterialCommunityIcons name={'calendar-month'} size={28} color={'#FFF'} />
+            <MaterialCommunityIcons name={'calendar-month'} size={20} color={'#FFF'} />
           </View>
         </View>
       </TouchableOpacity>
@@ -74,9 +74,6 @@ const styles = StyleSheet.create({
     padding: 0,
     minWidth: '95%',
     maxWidth: '95%',
-  },
-  containerBody: {
-    padding: 10,
   },
   head: {
     flexDirection: 'row'
@@ -100,12 +97,17 @@ const styles = StyleSheet.create({
     color: '#FFFF',
     fontWeight: "bold",
   },
+  containerBody: {
+    padding: 10,
+  },
   textDataAbertura: {
     fontSize: 15,
     color: '#FFFF',
     fontWeight: "bold",
   },
   dataAbertura: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    alignSelf: 'flex-end'
   },
 });

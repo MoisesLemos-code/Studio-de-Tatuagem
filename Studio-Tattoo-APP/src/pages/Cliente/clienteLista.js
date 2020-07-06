@@ -84,7 +84,7 @@ export default class Cliente extends Component {
         <FlatList
           contentContainerStyle={styles.listView}
           data={this.state.list}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={
             ({ item }) => <CardCliente
               item={item}

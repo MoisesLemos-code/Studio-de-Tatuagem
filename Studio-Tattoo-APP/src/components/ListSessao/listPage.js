@@ -31,7 +31,6 @@ export default class ListSessao extends Component {
         loading: false,
         refreshing: false
       });
-      console.log(this.state.list)
     } catch (err) {
       this.setState({
         loading: false,
@@ -68,7 +67,7 @@ export default class ListSessao extends Component {
         <FlatList
           contentContainerStyle={styles.listView}
           data={this.state.list}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={
             ({ item }) => <CardSessao
               item={item}

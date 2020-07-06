@@ -3,6 +3,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 
 import Cliente from './pages/Cliente/index';
+import Sessao from './pages/Sessao/index'
 import Home from './pages/Home/index';
 
 const Drawer = createDrawerNavigator();
@@ -26,6 +27,9 @@ export default function Routes() {
         <Drawer.Screen name="Cliente"
           component={Cliente}
           options={{ title: "Cadastro de Cliente" }} />
+        <Drawer.Screen name="Sessao"
+          component={Sessao}
+          options={{ title: "Iniciar Sessão" }} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

@@ -28,7 +28,7 @@ export default function Home({ navigation }) {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.btn}
-              onPress={() => navigation.navigate("Cliente")}
+              onPress={() => navigation.navigate("Sessao")}
             >
               <Image source={maquinaTatuar} />
               <Text style={styles.textBtn}>Iniciar Sessão</Text>
@@ -45,28 +45,7 @@ export default function Home({ navigation }) {
 
   const footer = () => {
     return (
-      <View style={styles.containerBoxFooter}>
-        <View style={styles.containerBoxItem}>
-          <Text style={styles.text}>Últimas Tatuagens</Text>
-          <View style={styles.line}></View>
-          <View style={styles.containerBtn}>
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={() => navigation.navigate("Cliente")}
-            >
-              <MaterialCommunityIcons name={'account-plus'} size={40} color={'#FFF'} />
-              <Text style={styles.textBtn}>Cadastro de Cliente</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={() => navigation.navigate("Cliente")}
-            >
-              <Image source={maquinaTatuar} />
-              <Text style={styles.textBtn}>Iniciar Sessão</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
+      <View style={styles.containerBoxFooter}></View>
     )
   }
 
