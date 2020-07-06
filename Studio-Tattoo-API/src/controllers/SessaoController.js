@@ -91,6 +91,23 @@ module.exports = {
 
     return res.json(obj)
   },
+  async listPage(req, res) {
+    const obj = await Sessao.findAll({
+      order: [
+        ['id', 'DESC'],
+      ],
+      limit: 3,
+      offset: 0,
+      include: [
+        {
+          model: Cliente,
+          as: 'cliente'
+        }
+      ]
+    });
+
+    return res.json(obj)
+  },
   async update(req, res) {
     try {
       const { tattoos, ...data } = req.body;
