@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, Image, ScrollView
+  View, Text, StyleSheet, TouchableOpacity, Image,
 } from 'react-native'
 
 import AppBar from '../../components/AppBar'

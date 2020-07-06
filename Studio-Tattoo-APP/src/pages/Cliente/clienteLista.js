@@ -31,7 +31,6 @@ export default class Cliente extends Component {
         loading: false,
         refreshing: false
       });
-      console.log(this.state.list)
     } catch (err) {
       this.setState({
         loading: false,
@@ -105,6 +104,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#121212',
     flex: 1,
     justifyContent: 'center',
+    paddingTop: 5,
+    paddingBottom: 5
   },
   listView: {
     alignItems: 'center'

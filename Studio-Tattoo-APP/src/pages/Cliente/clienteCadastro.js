@@ -5,7 +5,7 @@ import {
 } from 'react-native'
 import api from "../../services/api"
 
-export default function Cliente() {
+export default function ClienteCadastro() {
   const [user, setUser] = useState({
     nome: '',
     endereco: '',
@@ -138,7 +138,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: "bold",
     fontSize: 20,
-    paddingLeft: 10,
-    paddingRight: 10
   },
 });

@@ -17,9 +17,11 @@ export default function AppBar(props) {
 
   function informacoes() {
     Alert.alert(
-      "Informação!",
+      "Sobre!",
       "Este aplicativo foi desenvolvido por Moisés Lemos." +
-      "\n\nE-mail: Moises_lemos@outlook.com",
+      "\n\nE-mail: Moises_lemos@outlook.com" +
+      "\nGithub: MoisesLemos-code" +
+      "\nVersão: 1.1.0 - 05/07/2020",
       [
         { text: "OK" }
       ],

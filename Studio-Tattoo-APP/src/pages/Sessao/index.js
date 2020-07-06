@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import AppBar from '../../components/AppBar'
 import TabNavigator from './tabNavigator'
 
-export default function Cliente({ navigation }) {
+export default function Sessao({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.subContainer}>
