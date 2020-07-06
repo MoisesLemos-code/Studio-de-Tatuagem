@@ -22,7 +22,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tattoo-studio"
+    },
+    "android": {
+      "package": "com.tattoo_studio"
     }
   }
 }

@@ -18,7 +18,7 @@ module.exports = {
       const obj = await Cliente.findAll({
         where: {
           nome: {
-            [Op.like]: req.params.nome
+            [Op.like]: req.params.nome + '%'
           }
         },
       })

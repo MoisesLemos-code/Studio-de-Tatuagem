@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {
   View, Text, StyleSheet,
-  TouchableOpacity, TextInput, Alert, Modal
+  TouchableOpacity, Alert, Modal
 } from 'react-native'
+import { SearchBar, ListItem } from 'react-native-elements';
 import { Avatar } from 'react-native-paper';
 import avatarImg from './../../img/avatar.png'
 
@@ -15,10 +16,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 export default class SearchCliente extends Component {
 
   state = {
-    id: 0,
-    nome: '',
-    endereco: '',
-    email: '',
+    clientes: [],
+    clienteSelecionado: {
+      id: 0,
+      nome: '',
+      endereco: '',
+      email: '',
+    },
+    nomeDigitado: ''
   }
 
   constructor(props) {
@@ -27,12 +32,42 @@ export default class SearchCliente extends Component {
 
   componentDidMount() {
     this.setState({
-      id: 0,
-      nome: '',
-      endereco: '',
-      email: '',
+      clientes: [],
+      clienteSelecionado: {
+        id: 0,
+        nome: '',
+        endereco: '',
+        email: '',
+      },
+      nomeDigitado: ''
     })
   }
+
+  buscarCliente = async (nome) => {
+    this.setState({ ...this.state, nomeDigitado: nome })
+    try {
+      const res = await api.get(`/cliente/index/nome/${this.state.nomeDigitado}`);
+      this.setState({
+        clientes: [res.data]
+      });
+      console.log(this.state.clientes)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  selecionarCliente = () => {
+    if (clienteSelecionado.id == 0) {
+      Alert.alert(
+        "Atenção!",
+        "Selecione algum cliente!",
+        [
+          { text: "OK" }
+        ],
+        { cancelable: false }
+      )
+    }
+  }
+
   render() {
 
     return (
@@ -50,18 +85,33 @@ export default class SearchCliente extends Component {
             >
               <MaterialCommunityIcons name={'close-circle-outline'} size={28} color={'#353434'} />
             </TouchableOpacity>
-            <Text style={styles.textInputBody}>Nome</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Digite o nome"
-              type={'name'}
-              value={this.state.nome}
-              onChangeText={nome => this.setState({ ...this.state, nome })}
+            <SearchBar
+              placeholder="Digite o nome..."
+              onChangeText={nome => this.buscarCliente(nome)}
+              value={this.state.nomeDigitado}
+              containerStyle={styles.searchBarContainer}
+              inputStyle={styles.searchBarInput}
+              placeholderTextColor='#121212'
+              inputContainerStyle={styles.searchBarInputContainer}
             />
+            <View>
+              {
+                this.state.clientes.map((obj, i) => (
+                  <ListItem
+                    style={{ backgroundColor: 'red' }}
+                    key={i}
+                    title={obj.nome}
+                    titleStyle={{ color: '#121212' }}
+                    subtitle={obj.email}
+                    bottomDivider
+                  />
+                ))
+              }
+            </View>
             <View style={styles.bodyButtons}>
               <TouchableOpacity
                 style={styles.btn}
-                onPress={this.editarCliente}
+                onPress={this.selecionarCliente}
                 underlayColor='#fff'>
                 <Text style={styles.btnText}>Selecionar</Text>
               </TouchableOpacity>
@@ -111,18 +161,18 @@ const styles = StyleSheet.create({
   closeButton: {
     width: 40
   },
-  input: {
-    height: 50,
-    paddingStart: 5,
-    backgroundColor: 'white',
-    borderColor: 'black',
-    borderWidth: 1,
-    borderRadius: 5
-  },
-  textInputBody: {
+  searchBarContainer: {
     marginTop: 20,
-    fontWeight: "bold",
-    color: '#353434'
+    backgroundColor: '#fff',
+    borderRadius: 10
+  },
+  searchBarInput: {
+    borderRadius: 5,
+    color: '#121212'
+  },
+  searchBarInputContainer: {
+    backgroundColor: '#ccc',
+    borderRadius: 10
   },
   bodyButtons: {
     paddingTop: 20,
