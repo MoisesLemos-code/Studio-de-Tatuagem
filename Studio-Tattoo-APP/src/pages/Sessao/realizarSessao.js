@@ -16,7 +16,7 @@ import api from "../../services/api"
 
 export default function SessaoCadastro() {
   const [sessao, setSessao] = useState({
-    id: 3,
+    id: 8,
     status: '',
     total_acrescimo: 0.0,
     total_desconto: 0.0,

@@ -66,8 +66,6 @@ export default function ClienteCadastro() {
     setOpenCamera(false)
     setUser({ ...user, foto: imagem })
     setStatusFoto(true)
-    console.log('----')
-    console.log(imagem)
   }
 
   return (

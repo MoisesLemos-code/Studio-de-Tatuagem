@@ -23,7 +23,6 @@ export default class ListTattos extends Component {
 
   componentDidMount() {
     this.updateList()
-    console.log(this.state.sessao)
   }
 
   updateList = async () => {
