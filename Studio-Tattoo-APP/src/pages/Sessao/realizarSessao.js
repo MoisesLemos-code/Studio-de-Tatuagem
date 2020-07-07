@@ -108,7 +108,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#1E2125',
     elevation: 5,
     borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10
+    borderBottomRightRadius: 10,
+    marginBottom: 10
   },
   headerBody: {
     padding: 5,

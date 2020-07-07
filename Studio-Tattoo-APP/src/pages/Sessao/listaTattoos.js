@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import {
-  View, FlatList, StyleSheet
+  View, FlatList, StyleSheet, Text
 } from 'react-native'
 import api from "../../services/api"
+import { Avatar } from 'react-native-paper';
+import tatuagem from './../../img/tatuagem.png'
+
 
 export default class ListTattos extends Component {
 
@@ -27,7 +30,7 @@ export default class ListTattos extends Component {
     try {
       const res = await api.get(`/sessao/index/${this.state.sessao}`);
       this.setState({
-        list: res.data || [],
+        list: res.data.tattoos || [],
         loading: false,
         refreshing: false
       });
@@ -62,10 +65,16 @@ export default class ListTattos extends Component {
   }
 
   cardItem = (obj) => {
-    console.log(obj)
     return (
-      <View style={{ height: 90, width: 90 }}>
-        <Text>teste</Text>
+      <View style={styles.itemContainer}>
+        <View style={styles.itemHeader}>
+          <Avatar.Image source={tatuagem} size={150} style={styles.picture} />
+          <Text style={styles.itemDescricao}>{obj.descricao}</Text>
+        </View>
+        <View style={styles.itemBody}>
+          <Text style={styles.itemTamanho}>Tamanho: {obj.tamanho}cm</Text>
+          <Text style={styles.itemValor}>Valor: R${obj.valor}</Text>
+        </View>
       </View>
     )
   }
@@ -74,7 +83,6 @@ export default class ListTattos extends Component {
     return (
       <View style={styles.container}>
         <FlatList
-          contentContainerStyle={styles.listView}
           data={this.state.list}
           keyExtractor={(item, index) => index.toString()}
           renderItem={
@@ -95,4 +103,37 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#121212',
   },
+  itemContainer: {
+    backgroundColor: '#3498db',
+    borderRadius: 10,
+    overflow: 'hidden'
+  },
+  itemHeader: {
+    margin: 10
+  },
+  picture: {
+    marginTop: 10,
+    backgroundColor: '#FFF',
+    alignSelf: 'center'
+  },
+  itemDescricao: {
+    alignSelf: 'center',
+    fontWeight: "bold",
+    fontSize: 24,
+    color: '#FFF'
+  },
+  itemBody: {
+    paddingLeft: 10,
+    backgroundColor: '#1E2125',
+  },
+  itemTamanho: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: '#FFF'
+  },
+  itemValor: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: '#FFF'
+  }
 });
