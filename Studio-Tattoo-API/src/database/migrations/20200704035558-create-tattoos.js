@@ -9,11 +9,27 @@ module.exports = {
         autoIncrement: true,
         allowNull: false
       },
+      sessao_id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        references: { model: 'sessaos', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
       descricao: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       tamanho: {
+        type: Sequelize.DOUBLE,
+        allowNull: false,
+      },
+      desconto: {
+        type: Sequelize.DOUBLE,
+        allowNull: false,
+      },
+      acrescimo: {
         type: Sequelize.DOUBLE,
         allowNull: false,
       },

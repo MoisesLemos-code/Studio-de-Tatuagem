@@ -16,10 +16,9 @@ class Sessao extends Model {
       foreignKey: 'cliente_id',
       as: 'cliente'
     }),
-      this.belongsToMany(models.Tattoo, {
-        through: models.Tattoo_item,
-        as: 'tattoos',
-        foreignKey: 'sessao_id'
+      this.hasMany(models.Tattoo, {
+        foreignKey: 'sessao_id',
+        as: 'tattoos'
       })
   }
 }

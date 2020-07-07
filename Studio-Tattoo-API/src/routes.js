@@ -27,7 +27,5 @@ routes.get('/sessao/list/page', SessaoController.listPage)
 routes.get('/sessao/index/:id', SessaoController.index)
 routes.put('/sessao/update/:id', SessaoController.update)
 routes.delete('/sessao/delete/:id', SessaoController.destroy)
-routes.delete('/delete/sessao/:id_sessao/item/:id_item',
-  SessaoController.destroyItemSessao)
 
 module.exports = routes;

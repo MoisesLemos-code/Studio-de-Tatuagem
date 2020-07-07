@@ -2,8 +2,8 @@ const Tattoo = require('../models/Tattoo')
 
 module.exports = {
   async store(req, res) {
-    const { descricao, tamanho, valor } = req.body;
-    const obj = await Tattoo.create({ descricao, tamanho, valor });
+    const tattoo = req.body;
+    const obj = await Tattoo.create(tattoo);
 
     return res.json(obj);
   },

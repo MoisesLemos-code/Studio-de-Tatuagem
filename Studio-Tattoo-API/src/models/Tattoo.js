@@ -5,16 +5,17 @@ class Tattoo extends Model {
     super.init({
       descricao: DataTypes.STRING,
       tamanho: DataTypes.DOUBLE,
+      desconto: DataTypes.DOUBLE,
+      acrescimo: DataTypes.DOUBLE,
       valor: DataTypes.DOUBLE,
     }, {
       sequelize
     })
   }
   static associate(models) {
-    this.belongsToMany(models.Sessao, {
-      through: models.Tattoo_item,
-      as: 'sessaos',
-      foreignKey: 'tattoo_id',
+    this.belongsTo(models.Sessao, {
+      foreignKey: 'sessao_id',
+      as: 'sessao'
     })
   }
 }
