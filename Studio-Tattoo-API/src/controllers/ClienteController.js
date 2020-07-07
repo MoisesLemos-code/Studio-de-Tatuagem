@@ -1,11 +1,12 @@
 const Cliente = require('../models/Cliente')
+const ClienteFotoController = require('./ClienteFotoController')
 const { Op } = require('sequelize');
 
 module.exports = {
   async store(req, res) {
     const { nome, endereco, email } = req.body;
     const obj = await Cliente.create({ nome, endereco, email });
-
+    ClienteFotoController.store(obj)
     return res.json(obj);
   },
   async index(req, res) {
@@ -45,11 +46,13 @@ module.exports = {
       }
     )
     return res.status(200).json(obj)
-  }, async destroy(req, res) {
+  },
+  async destroy(req, res) {
     try {
       await Cliente.destroy({
         where: { id: req.params.id }
       });
+      ClienteFotoController.destroy(req.params.id)
     } catch (err) {
       return res.json({ status: 505, mensagem: "Não foi possível excluir, verfique se o cliente possui sessões!" })
     }

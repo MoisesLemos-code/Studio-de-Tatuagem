@@ -1,10 +1,11 @@
 const Tattoo = require('../models/Tattoo')
+const TattooFotoController = require('./TattooFotoController')
 
 module.exports = {
   async store(req, res) {
     const tattoo = req.body;
     const obj = await Tattoo.create(tattoo);
-
+    TattooFotoController.store(obj)
     return res.json(obj);
   },
   async index(req, res) {
@@ -34,6 +35,7 @@ module.exports = {
     await Tattoo.destroy({
       where: { id: req.params.id }
     });
+    TattooFotoController.destroy(req.params.id)
     return res.json({ success: "ok" });
   },
 };

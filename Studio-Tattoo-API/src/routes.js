@@ -1,11 +1,27 @@
 const express = require('express');
+const multer = require('multer');
+const multerConfig = require('./config/multer');
 
 const ClienteController = require('./controllers/ClienteController')
 const TattooController = require('./controllers/TattooController')
 const SessaoController = require('./controllers/SessaoController')
-
+const FotoController = require('./controllers/FotoController')
+const ClienteFotoController = require('./controllers/ClienteFotoController')
+const TattooFotoController = require('./controllers/TattooFotoController')
 
 const routes = express.Router();
+
+routes.post('/cliente/:id/fotos', multer(multerConfig).single('foto'), FotoController.storeFotoCliente);
+routes.post('/tattoo/:id/fotos', multer(multerConfig).single('foto'), FotoController.storeFotoTattoo);
+routes.get("/clientefoto/:id/show/", FotoController.showCliente);
+routes.get("/tattoofoto/:id/show/", FotoController.showTattoo);
+
+
+routes.get("/clientefoto/:id", ClienteFotoController.index);
+routes.get("/tattoofoto/:id", TattooFotoController.index);
+routes.get("/clientefoto/list/", ClienteFotoController.list);
+routes.get("/tattoofoto/list/", TattooFotoController.list);
+
 
 routes.post('/cliente/insert', ClienteController.store)
 routes.get('/cliente/list', ClienteController.list)
