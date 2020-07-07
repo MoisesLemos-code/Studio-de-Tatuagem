@@ -1,108 +1,97 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet,
-  TouchableOpacity, TextInput, Alert
+  TouchableOpacity,
 } from 'react-native'
 import { Avatar } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SearchCliente from './searchCliente'
-
 import avatarImg from './../../img/avatar.png'
+
+import { FontAwesome } from '@expo/vector-icons'
+
+import SearchCliente from './searchCliente'
+import ListaTattoos from './listaTattoos'
 
 import api from "../../services/api"
 
 
 export default function SessaoCadastro() {
   const [sessao, setSessao] = useState({
-    status: "Aberto",
+    id: 3,
+    status: '',
     total_acrescimo: 0.0,
     total_desconto: 0.0,
     total_liquido: 0.0,
-    cliente_id: 0.0
+    cliente_id: 0.0,
+    modo: 'iniciar'
   });
-
+  const [list, setLista] = useState({
+    data: [],
+    page: 1,
+    seed: 1,
+    refreshing: false,
+    loading: false
+  })
   const [cliente, setCliente] = useState({
     id: 0,
     nome: 'Selecione o cliente',
-    endereco: '',
-    email: '',
+    endereco: '---',
+    email: '---',
   })
-
   const [modal, setModal] = useState(false)
 
-  // salvarSessao = async () => {
-  //   try {
-  //     if (sessao.nome === '' || sessao.endereco === '' || sessao.email === '') {
-  //       Alert.alert(
-  //         "Atenção!",
-  //         "Preencha todos os campos!",
-  //         [
-  //           { text: "OK" }
-  //         ],
-  //         { cancelable: false }
-  //       )
-  //     } else {
-  //       await api.post(`/sessao/insert`, user);
-  //       Alert.alert(
-  //         "Sucesso!",
-  //         "Sessão realizada com sucesso!",
-  //         [
-  //           { text: "OK" }
-  //         ],
-  //         { cancelable: false }
-  //       )
-  //       setSessao({
-  //         status: "Aberto",
-  //         total_acrescimo: 0.0,
-  //         total_desconto: 0.0,
-  //         total_liquido: 0.0,
-  //       })
-  //     }
-  //   }
-  //   catch (err) {
-  //     console.log(err)
-  //     Alert.alert(
-  //       "Falha!",
-  //       "Não foi possível cadastrar!",
-  //       [
-  //         { text: "OK" }
-  //       ],
-  //       { cancelable: false }
-  //     )
-  //   }
-  // }
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.bodyInputs}>
-        <View style={styles.header}>
-          <Avatar.Image source={avatarImg} size={150} style={styles.picture} />
-          <View style={styles.headerBody}>
-            <Text style={styles.textHead}>Cliente</Text>
-            <SearchCliente
-              modalHandle={modal}
-              hideModal={() => setModal(false)}
-              clienteSearch={(cliente) => setCliente(cliente)}
-            />
-            <TouchableOpacity
-              style={styles.btnCliente}
-              onPress={() => setModal(true)}
-            >
-              <Text style={styles.textInfo}>{cliente.nome}
-              </Text>
-              <MaterialCommunityIcons name={'account-search'} size={28} color={'#FFF'} />
-            </TouchableOpacity>
-          </View>
+  header = () => {
+    return (
+      <View style={styles.header}>
+        <Avatar.Image source={avatarImg} size={150} style={styles.picture} />
+        <View style={styles.headerBody}>
+          <Text style={styles.textHead}>Cliente</Text>
+          <SearchCliente
+            modalHandle={modal}
+            hideModal={() => setModal(false)}
+            clienteSearch={(cliente) => setCliente(cliente)}
+          />
+          <TouchableOpacity
+            style={styles.btnCliente}
+            onPress={() => setModal(true)}
+          >
+            <Text style={styles.textInfo}>{cliente.nome}
+            </Text>
+            <FontAwesome name={'search'} size={25} color={'#FFF'} />
+          </TouchableOpacity>
+          <Text style={styles.textHead}>Email</Text>
+          <Text style={styles.textInfo}>{cliente.email}</Text>
+          <Text style={styles.textHead}>Endereço</Text>
+          <Text style={styles.textInfo}>{cliente.endereco}</Text>
         </View>
       </View>
+    )
+  }
+
+  footer = () => {
+    return (
       <View style={styles.bodyButtons}>
         <TouchableOpacity
           style={styles.btn}
           // onPress={() => salvarSessao()}
           underlayColor='#fff'>
-          <Text style={styles.btnText}>Salvar</Text>
+          <Text style={styles.btnText}>{(
+            sessao.modo === 'iniciar'
+              ? 'Iniciar Sessão'
+              : (sessao.modo === 'encerrar' ?
+                'Encerrar Sessão'
+                : 'Reabrir Sessão')
+          )}</Text>
         </TouchableOpacity>
       </View>
+    )
+  }
+
+  return (
+    <View style={styles.container}>
+      <ListaTattoos
+        sessaoID={sessao.id}
+        header={() => header()}
+        footer={() => footer()} />
     </View>
   )
 }
@@ -114,11 +103,8 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 1,
   },
-  bodyInputs: {
-
-  },
   header: {
-    height: 300,
+    padding: 10,
     backgroundColor: '#1E2125',
     elevation: 5,
     borderBottomLeftRadius: 10,
@@ -132,6 +118,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   textHead: {
+    marginTop: 10,
     fontSize: 15,
     color: '#D4D7DB'
   },
@@ -142,6 +129,14 @@ const styles = StyleSheet.create({
   btnCliente: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  body: {
+    marginTop: 10,
+    backgroundColor: '#FFF',
+    elevation: 5,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    height: 300
   },
   bodyButtons: {
     paddingTop: 20,

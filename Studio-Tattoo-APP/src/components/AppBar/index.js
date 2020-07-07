@@ -1,6 +1,7 @@
 import React from 'react';
 import { DefaultTheme, Appbar, Provider } from 'react-native-paper';
 import { StyleSheet, Alert } from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function AppBar(props) {
@@ -33,16 +34,16 @@ export default function AppBar(props) {
     <Provider
       theme={theme}
       settings={{
-        icon: props => <MaterialCommunityIcons {...props}
+        icon: props => <FontAwesome5 {...props}
           style={{ color: '#FFF' }} />,
       }}>
       <Appbar style={styles.appBar}>
         <Appbar.Action
-          icon="menu"
+          icon="bars"
           onPress={() => props.drawer()}
         />
         <Appbar.Content title="Tattoo Studio" titleStyle={{ color: '#FFF', textAlign: 'center' }} />
-        <Appbar.Action icon="dots-vertical-circle-outline" onPress={() => informacoes()} />
+        <Appbar.Action icon="ellipsis-v" onPress={() => informacoes()} />
       </Appbar>
     </Provider >
   )

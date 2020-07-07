@@ -2,12 +2,9 @@ import React from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, Image,
 } from 'react-native'
-
+import { FontAwesome } from '@expo/vector-icons'
 import AppBar from '../../components/AppBar'
-
 import maquinaTatuar from '../../img/maquina_tatuar.png'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import ListSessao from '../../components/ListSessao/listPage'
 
 export default function Home({ navigation }) {
@@ -23,7 +20,7 @@ export default function Home({ navigation }) {
               style={styles.btn}
               onPress={() => navigation.navigate("Cliente")}
             >
-              <MaterialCommunityIcons name={'account-plus'} size={40} color={'#FFF'} />
+              <FontAwesome name={'user-plus'} size={40} color={'#FFF'} />
               <Text style={styles.textBtn}>Cadastro de Cliente</Text>
             </TouchableOpacity>
             <TouchableOpacity

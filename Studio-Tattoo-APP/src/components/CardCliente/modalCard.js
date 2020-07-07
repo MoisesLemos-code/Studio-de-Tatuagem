@@ -5,12 +5,9 @@ import {
 } from 'react-native'
 import { Avatar } from 'react-native-paper';
 import avatarImg from './../../img/avatar.png'
+import { FontAwesome } from '@expo/vector-icons'
 
 import api from "../../services/api"
-
-
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 
 export default class ModalCard extends Component {
 
@@ -130,7 +127,7 @@ export default class ModalCard extends Component {
               style={styles.closeButton}
               onPress={() => this.props.hideModal()}
             >
-              <MaterialCommunityIcons name={'close-circle-outline'} size={28} color={'#353434'} />
+              <FontAwesome name={'times-circle'} size={28} color={'#353434'} />
             </TouchableOpacity>
             <Text style={styles.textInputBody}>Nome</Text>
             <TextInput

@@ -1,16 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet,
   TouchableOpacity, TextInput, Alert
 } from 'react-native'
+import { FontAwesome } from '@expo/vector-icons'
+import { Avatar } from 'react-native-paper';
+import avatarImg from './../../img/avatar.png'
 import api from "../../services/api"
+
+import Camera from '../../components/Camera/'
 
 export default function ClienteCadastro() {
   const [user, setUser] = useState({
+    foto: '',
     nome: '',
     endereco: '',
     email: ''
   });
+  const [openCamera, setOpenCamera] = useState(false)
+  const [statusFoto, setStatusFoto] = useState(false)
+
 
   salvarCliente = async () => {
     try {
@@ -53,43 +62,68 @@ export default function ClienteCadastro() {
     }
   }
 
+  setarImagem = async (imagem) => {
+    setOpenCamera(false)
+    setUser({ ...user, foto: imagem })
+    setStatusFoto(true)
+    console.log('----')
+    console.log(imagem)
+  }
+
   return (
     <View style={styles.container}>
-      <View style={styles.bodyInputs}>
-        <Text style={styles.textInputBody}>Nome</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite o nome"
-          type={'name'}
-          value={user.nome}
-          onChangeText={nome => setUser({ ...user, nome })}
-        />
-        <Text style={styles.textInputBody}>Endereço</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite o endereço"
-          type={'street-address'}
-          value={user.endereco}
-          onChangeText={endereco => setUser({ ...user, endereco })}
-        />
-        <Text style={styles.textInputBody}>E-mail</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite o e-mail"
-          type={'email'}
-          keyboardType={"email-address"}
-          value={user.email}
-          onChangeText={email => setUser({ ...user, email })}
-        />
-      </View>
-      <View style={styles.bodyButtons}>
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => salvarCliente()}
-          underlayColor='#fff'>
-          <Text style={styles.btnText}>Salvar</Text>
-        </TouchableOpacity>
-      </View>
+      {openCamera ?
+        <Camera
+          voltar={() => setOpenCamera(false)}
+          capturarFoto={(imagem) => setarImagem(imagem)} />
+        :
+        <>
+          <View style={styles.bodyInputs}>
+            <TouchableOpacity
+              style={styles.btnCamera}
+              onPress={() => setOpenCamera(true)}
+            >
+              <Avatar.Image
+                source={(statusFoto ? { uri: user.foto } : avatarImg)}
+                size={150} style={styles.picture} />
+              <FontAwesome style={styles.cameraIcon} name={'camera'} size={28} color={'#FFF'} />
+            </TouchableOpacity>
+            <Text style={styles.textInputBody}>Nome</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Digite o nome"
+              type={'name'}
+              value={user.nome}
+              onChangeText={nome => setUser({ ...user, nome })}
+            />
+            <Text style={styles.textInputBody}>Endereço</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Digite o endereço"
+              type={'street-address'}
+              value={user.endereco}
+              onChangeText={endereco => setUser({ ...user, endereco })}
+            />
+            <Text style={styles.textInputBody}>E-mail</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Digite o e-mail"
+              type={'email'}
+              keyboardType={"email-address"}
+              value={user.email}
+              onChangeText={email => setUser({ ...user, email })}
+            />
+          </View>
+          <View style={styles.bodyButtons}>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => salvarCliente()}
+              underlayColor='#fff'>
+              <Text style={styles.btnText}>Salvar</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      }
     </View>
   )
 }
@@ -104,6 +138,19 @@ const styles = StyleSheet.create({
   },
   bodyInputs: {
     paddingHorizontal: 10,
+  },
+  btnCamera: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  cameraIcon: {
+    position: 'relative',
+    right: 50,
+    alignSelf: 'flex-end',
+    elevation: 2
+  },
+  picture: {
+    elevation: 1,
   },
   input: {
     height: 50,

@@ -8,7 +8,7 @@ import {
 import Moment from 'moment';
 import { Avatar } from 'react-native-paper';
 import avatarImg from './../../img/avatar.png'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { FontAwesome5 } from '@expo/vector-icons'
 
 
 export default class CardSessao extends Component {
@@ -57,7 +57,7 @@ export default class CardSessao extends Component {
           <View style={styles.dataAbertura}>
             <Text style={styles.textDataAbertura}>
               {Moment(this.state.item.createdAt).format('h:mm a' + " - " + "D MMM YYYY ")}</Text>
-            <MaterialCommunityIcons name={'calendar-month'} size={20} color={'#FFF'} />
+            <FontAwesome5 name={'calendar-alt'} size={20} color={'#FFF'} />
           </View>
         </View>
       </TouchableOpacity>

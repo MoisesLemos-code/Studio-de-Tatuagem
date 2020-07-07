@@ -5,11 +5,10 @@ import {
 } from 'react-native'
 import { Avatar } from 'react-native-paper';
 import avatarImg from './../../img/avatar.png'
+import { FontAwesome } from '@expo/vector-icons'
 
 import api from "../../services/api"
 
-
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
 export default class SearchCliente extends Component {
@@ -128,7 +127,7 @@ export default class SearchCliente extends Component {
               style={styles.closeButton}
               onPress={() => this.props.hideModal()}
             >
-              <MaterialCommunityIcons name={'close-circle-outline'} size={28} color={'#353434'} />
+              <FontAwesome name={'times-circle'} size={28} color={'#353434'} />
             </TouchableOpacity>
             <View style={styles.containerInput}>
               <TextInput
@@ -143,7 +142,7 @@ export default class SearchCliente extends Component {
                 onPress={this.buscarCliente}
               >
                 <Text style={styles.btnText}>Buscar</Text>
-                <MaterialCommunityIcons name={'find-replace'} size={28} color={'#FFF'} />
+                <FontAwesome name={'search'} size={20} color={'#FFF'} />
               </TouchableOpacity>
             </View>
             <View style={styles.listBox}>

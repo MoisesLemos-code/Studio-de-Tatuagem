@@ -1,7 +1,7 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { Image, StyleSheet } from 'react-native'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Image } from 'react-native'
+import { FontAwesome } from '@expo/vector-icons'
 
 import maquinaTatuar from '../../img/maquina_tatuar.png'
 
@@ -30,7 +30,7 @@ export default function TabNavigator() {
         options={{
           tabBarLabel: 'Visualizar sessões',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="view-stream" color={color} size={26} />
+            <FontAwesome name="list" color={color} size={20} />
           ),
         }} />
     </Tab.Navigator>
