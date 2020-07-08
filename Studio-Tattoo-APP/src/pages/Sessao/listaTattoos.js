@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, FlatList, StyleSheet, Text
+  View, FlatList, StyleSheet, Text, TouchableOpacity
 } from 'react-native'
 import api from "../../services/api"
 import { Avatar } from 'react-native-paper';
@@ -65,7 +65,7 @@ export default class ListTattos extends Component {
 
   cardItem = (obj) => {
     return (
-      <View style={styles.itemContainer}>
+      <TouchableOpacity style={styles.itemContainer}>
         <View style={styles.itemHeader}>
           <Avatar.Image source={tatuagem} size={150} style={styles.picture} />
           <Text style={styles.itemDescricao}>{obj.descricao}</Text>
@@ -74,7 +74,7 @@ export default class ListTattos extends Component {
           <Text style={styles.itemTamanho}>Tamanho: {obj.tamanho}cm</Text>
           <Text style={styles.itemValor}>Valor: R${obj.valor}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#121212',
   },
   itemContainer: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#474554',
     borderRadius: 10,
     overflow: 'hidden'
   },

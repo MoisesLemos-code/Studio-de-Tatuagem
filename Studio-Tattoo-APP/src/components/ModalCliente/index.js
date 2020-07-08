@@ -11,7 +11,7 @@ import Camera from '../Camera'
 
 import api from "../../services/api"
 
-export default class ModalCard extends Component {
+export default class ModalCliente extends Component {
 
   state = {
     id: this.props.item.id,
@@ -153,7 +153,7 @@ export default class ModalCard extends Component {
             <View style={styles.modalView}>
               <TouchableOpacity
                 style={styles.closeButton}
-                onPress={() => this.props.hideModal()}
+                onPress={() => { this.props.hideModal(), this.setState({ ...this.state, statusFoto: false }) }}
               >
                 <FontAwesome name={'times-circle'} size={28} color={'#353434'} />
               </TouchableOpacity>

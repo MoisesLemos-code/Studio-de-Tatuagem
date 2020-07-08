@@ -6,18 +6,24 @@ import {
 import { Avatar } from 'react-native-paper';
 import tatuagem from './../../img/tatuagem.png'
 import { FontAwesome } from '@expo/vector-icons'
+import Camera from '../Camera'
+
 
 import api from "../../services/api"
 
-export default class ModalCard extends Component {
+export default class ModalTatuagem extends Component {
 
   state = {
     sessao_id: this.props.sessaoID,
+    id: 0,
     descricao: "",
-    tamanho: 0.0,
-    desconto: 0.0,
-    acrescimo: 0.0,
-    valor: 0.0
+    tamanho: 0,
+    desconto: 0,
+    acrescimo: 0,
+    valor: 0,
+    openCamera: false,
+    statusFoto: false,
+    foto: ''
   }
 
   constructor(props) {
@@ -27,36 +33,104 @@ export default class ModalCard extends Component {
   componentDidMount() {
     this.setState({
       sessao_id: this.props.sessaoID,
+      id: 0,
       descricao: "",
-      tamanho: 0.0,
-      desconto: 0.0,
-      acrescimo: 0.0,
-      valor: 0.0
+      tamanho: 0,
+      desconto: 0,
+      acrescimo: 0,
+      valor: 0,
+      openCamera: false,
+      statusFoto: false,
+      foto: ''
     })
   }
 
-  editarCliente = async () => {
+  setarImagem = async (imagem) => {
+    this.setState({
+      ...this.state,
+      openCamera: false,
+      foto: imagem,
+      statusFoto: true
+    })
+  }
+
+  salvarTattoo = async () => {
     try {
-      if (this.state.nome === '' || this.state.endereco === '' || this.state.email === '') {
+      if (this.state.descricao === '' || this.state.tamanho <= 0 || this.state.valor < 0) {
         Alert.alert(
           "Atenção!",
-          "Preencha todos os campos!",
+          "Preencha todos os campos corretamente!",
           [
             { text: "OK" }
           ],
           { cancelable: false }
         )
       } else {
-        await api.put(`/cliente/update/${this.state.id}`, {
-          nome: this.state.nome,
-          endereco: this.state.endereco,
-          email: this.state.email
+        await api.post(`/tattoo/insert`, {
+          sessao_id: this.state.sessao_id,
+          descricao: this.state.descricao,
+          tamanho: this.state.tamanho,
+          desconto: this.state.desconto,
+          acrescimo: this.state.acrescimo,
+          valor: this.state.valor,
+        });
+        Alert.alert(
+          "Sucesso!",
+          "Tattoo inserida com sucesso!",
+          [
+            { text: "OK" }
+          ],
+          { cancelable: false }
+        )
+        this.props.inserirItem()
+      }
+    }
+    catch (err) {
+      console.log(err)
+      Alert.alert(
+        "Falha!",
+        "Não foi possível cadastrar!",
+        [
+          { text: "OK" }
+        ],
+        { cancelable: false }
+      )
+    }
+  }
+
+  editarTattoo = async () => {
+    try {
+      if (this.state.descricao === '' || this.state.tamanho <= 0 || this.state.valor < 0) {
+        Alert.alert(
+          "Atenção!",
+          "Preencha todos os campos corretamente!",
+          [
+            { text: "OK" }
+          ],
+          { cancelable: false }
+        )
+      } else {
+        await api.put(`/tattto/update/${this.state.id}`, {
+          descricao: this.state.descricao,
+          tamanho: this.state.tamanho,
+          valor: this.state.valor
         }, {
           headers: {
             'Content-Type': 'application/json',
           }
         });
-        this.props.updateItem(this.state)
+        if (resposta.data.status === 505) {
+          Alert.alert(
+            "Falha!",
+            resposta.data.mensagem,
+            [
+              { text: "OK" }
+            ],
+            { cancelable: false }
+          )
+        } else {
+          this.props.updateItem(this.state)
+        }
       }
     }
     catch (err) {
@@ -72,7 +146,7 @@ export default class ModalCard extends Component {
     }
   }
 
-  excluirCliente = () => {
+  excluirTattoo = () => {
     try {
       Alert.alert(
         'Atenção!',
@@ -86,7 +160,7 @@ export default class ModalCard extends Component {
           {
             text: 'OK',
             onPress: async () => {
-              const resposta = await api.delete(`/cliente/delete/${this.state.id}`);
+              const resposta = await api.delete(`/tattoo/delete/${this.state.id}`);
               if (resposta.data.status === 505) {
                 Alert.alert(
                   "Falha!",
@@ -116,6 +190,7 @@ export default class ModalCard extends Component {
     }
   }
 
+
   render() {
 
     return (
@@ -124,56 +199,74 @@ export default class ModalCard extends Component {
         transparent={true}
         visible={this.props.modalHandle}
       >
-        <View style={styles.centeredView}>
-          <Avatar.Image source={avatarImg} size={150} style={styles.picture} />
-          <View style={styles.modalView}>
+        {this.state.openCamera ?
+          <Camera
+            voltar={() => this.setState({ ...this.state, openCamera: false })}
+            capturarFoto={(imagem) => this.setarImagem(imagem)} />
+          :
+          <View style={styles.centeredView}>
             <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => this.props.hideModal()}
+              style={styles.btnCamera}
+              onPress={() => this.setState({ ...this.state, openCamera: true })}
             >
-              <FontAwesome name={'times-circle'} size={28} color={'#353434'} />
+              <Avatar.Image source={(this.state.statusFoto ? { uri: this.state.foto } : tatuagem)} size={150} style={styles.picture} />
+              <FontAwesome style={styles.cameraIcon} name={'camera'} size={28} color={'#101010'} />
             </TouchableOpacity>
-            <Text style={styles.textInputBody}>Nome</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Digite o nome"
-              type={'name'}
-              value={this.state.nome}
-              onChangeText={nome => this.setState({ ...this.state, nome })}
-            />
-            <Text style={styles.textInputBody}>Endereço</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Digite o endereço"
-              type={'street-address'}
-              value={this.state.endereco}
-              onChangeText={endereco => this.setState({ ...this.state, endereco })}
-            />
-            <Text style={styles.textInputBody}>E-mail</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Digite o e-mail"
-              type={'email'}
-              keyboardType={"email-address"}
-              value={this.state.email}
-              onChangeText={email => this.setState({ ...this.state, email })}
-            />
-            <View style={styles.bodyButtons}>
+            <View style={styles.modalView}>
               <TouchableOpacity
-                style={styles.btnSalvar}
-                onPress={this.editarCliente}
-                underlayColor='#fff'>
-                <Text style={styles.btnText}>Salvar</Text>
+                style={styles.closeButton}
+                onPress={() => this.props.hideModal()}
+              >
+                <FontAwesome name={'times-circle'} size={28} color={'#353434'} />
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.btnExcluir}
-                onPress={this.excluirCliente}
-                underlayColor='#fff'>
-                <Text style={styles.btnText}>Excluir</Text>
-              </TouchableOpacity>
+              <Text style={styles.textInputBody}>Descrição</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="...Rosa com fogo"
+                value={this.state.descricao}
+                onChangeText={descricao => this.setState({ ...this.state, descricao })}
+              />
+              <Text style={styles.textInputBody}>Tamanho</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Tamanho em centímetros"
+                keyboardType='numeric'
+                onChangeText={tamanho => this.setState({ ...this.state, tamanho })}
+              />
+              <Text style={styles.textInputBody}>Valor (R$)</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Valor da tatuagem"
+                keyboardType='numeric'
+                onChangeText={valor => this.setState({ ...this.state, valor })}
+              />
+              <View style={styles.bodyButtons}>
+                <TouchableOpacity
+                  style={styles.btnSalvar}
+                  onPress={this.salvarTattoo}
+                  underlayColor='#fff'>
+                  <Text style={styles.btnText}>Salvar</Text>
+                </TouchableOpacity>
+                {this.state.id > 0 &&
+                  <TouchableOpacity
+                    style={styles.btnSalvar}
+                    onPress={this.editarTattoo}
+                    underlayColor='#fff'>
+                    <Text style={styles.btnText}>Salvar</Text>
+                  </TouchableOpacity>
+                }
+                {this.state.id > 0 &&
+                  <TouchableOpacity
+                    style={styles.btnExcluir}
+                    onPress={this.excluirTattoo}
+                    underlayColor='#fff'>
+                    <Text style={styles.btnText}>Excluir</Text>
+                  </TouchableOpacity>
+                }
+              </View>
             </View>
           </View>
-        </View>
+        }
       </Modal>
     )
   }
@@ -187,7 +280,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: 'center',
   },
+  btnCamera: {
+    justifyContent: 'center',
+    elevation: 10,
+  },
+  cameraIcon: {
+    position: 'relative',
+    right: 10,
+    alignSelf: 'flex-end',
+    elevation: 15,
+  },
   picture: {
+    backgroundColor: '#fff',
+    alignSelf: 'center',
     position: 'relative',
     top: 50,
     elevation: 5,
