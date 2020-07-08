@@ -6,16 +6,21 @@ import {
 import { Avatar } from 'react-native-paper';
 import avatarImg from './../../img/avatar.png'
 import { FontAwesome } from '@expo/vector-icons'
+import Camera from '../Camera'
+
 
 import api from "../../services/api"
 
 export default class ModalCard extends Component {
 
   state = {
+    id: this.props.item.id,
     nome: this.props.item.nome,
     endereco: this.props.item.endereco,
     email: this.props.item.email,
-    id: this.props.item.id,
+    openCamera: false,
+    statusFoto: false,
+    foto: ''
   }
 
   constructor(props) {
@@ -24,10 +29,22 @@ export default class ModalCard extends Component {
 
   componentDidMount() {
     this.setState({
+      id: this.props.item.id,
       nome: this.props.item.nome,
       endereco: this.props.item.endereco,
       email: this.props.item.email,
-      id: this.props.item.id,
+      openCamera: false,
+      statusFoto: false,
+      foto: ''
+    })
+  }
+
+  setarImagem = async (imagem) => {
+    this.setState({
+      ...this.state,
+      openCamera: false,
+      foto: imagem,
+      statusFoto: true
     })
   }
 
@@ -120,56 +137,68 @@ export default class ModalCard extends Component {
         transparent={true}
         visible={this.props.modalHandle}
       >
-        <View style={styles.centeredView}>
-          <Avatar.Image source={avatarImg} size={150} style={styles.picture} />
-          <View style={styles.modalView}>
+        {this.state.openCamera ?
+          <Camera
+            voltar={() => this.setState({ ...this.state, openCamera: false })}
+            capturarFoto={(imagem) => this.setarImagem(imagem)} />
+          :
+          <View style={styles.centeredView}>
             <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => this.props.hideModal()}
+              style={styles.btnCamera}
+              onPress={() => this.setState({ ...this.state, openCamera: true })}
             >
-              <FontAwesome name={'times-circle'} size={28} color={'#353434'} />
+              <Avatar.Image source={(this.state.statusFoto ? { uri: this.state.foto } : avatarImg)} size={150} style={styles.picture} />
+              <FontAwesome style={styles.cameraIcon} name={'camera'} size={28} color={'#101010'} />
             </TouchableOpacity>
-            <Text style={styles.textInputBody}>Nome</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Digite o nome"
-              type={'name'}
-              value={this.state.nome}
-              onChangeText={nome => this.setState({ ...this.state, nome })}
-            />
-            <Text style={styles.textInputBody}>Endereço</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Digite o endereço"
-              type={'street-address'}
-              value={this.state.endereco}
-              onChangeText={endereco => this.setState({ ...this.state, endereco })}
-            />
-            <Text style={styles.textInputBody}>E-mail</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Digite o e-mail"
-              type={'email'}
-              keyboardType={"email-address"}
-              value={this.state.email}
-              onChangeText={email => this.setState({ ...this.state, email })}
-            />
-            <View style={styles.bodyButtons}>
+            <View style={styles.modalView}>
               <TouchableOpacity
-                style={styles.btnSalvar}
-                onPress={this.editarCliente}
-                underlayColor='#fff'>
-                <Text style={styles.btnText}>Salvar</Text>
+                style={styles.closeButton}
+                onPress={() => this.props.hideModal()}
+              >
+                <FontAwesome name={'times-circle'} size={28} color={'#353434'} />
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.btnExcluir}
-                onPress={this.excluirCliente}
-                underlayColor='#fff'>
-                <Text style={styles.btnText}>Excluir</Text>
-              </TouchableOpacity>
+              <Text style={styles.textInputBody}>Nome</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Digite o nome"
+                type={'name'}
+                value={this.state.nome}
+                onChangeText={nome => this.setState({ ...this.state, nome })}
+              />
+              <Text style={styles.textInputBody}>Endereço</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Digite o endereço"
+                type={'street-address'}
+                value={this.state.endereco}
+                onChangeText={endereco => this.setState({ ...this.state, endereco })}
+              />
+              <Text style={styles.textInputBody}>E-mail</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Digite o e-mail"
+                type={'email'}
+                keyboardType={"email-address"}
+                value={this.state.email}
+                onChangeText={email => this.setState({ ...this.state, email })}
+              />
+              <View style={styles.bodyButtons}>
+                <TouchableOpacity
+                  style={styles.btnSalvar}
+                  onPress={this.editarCliente}
+                  underlayColor='#fff'>
+                  <Text style={styles.btnText}>Salvar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.btnExcluir}
+                  onPress={this.excluirCliente}
+                  underlayColor='#fff'>
+                  <Text style={styles.btnText}>Excluir</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
+        }
       </Modal>
     )
   }
@@ -183,7 +212,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: 'center',
   },
+  btnCamera: {
+    justifyContent: 'center',
+    elevation: 10,
+  },
+  cameraIcon: {
+    position: 'relative',
+    right: 10,
+    alignSelf: 'flex-end',
+    elevation: 15,
+  },
   picture: {
+    backgroundColor: '#fff',
+    alignSelf: 'center',
     position: 'relative',
     top: 50,
     elevation: 5,

@@ -137,6 +137,9 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: 'center',
+		elevation: 5,
+		zIndex: 5,
+		backgroundColor: '#fff'
 	},
 	camera: {
 		flex: 1,

@@ -4,7 +4,7 @@ import {
   TouchableOpacity, TextInput, Alert, Modal
 } from 'react-native'
 import { Avatar } from 'react-native-paper';
-import avatarImg from './../../img/avatar.png'
+import tatuagem from './../../img/tatuagem.png'
 import { FontAwesome } from '@expo/vector-icons'
 
 import api from "../../services/api"

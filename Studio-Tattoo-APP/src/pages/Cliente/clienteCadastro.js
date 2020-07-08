@@ -138,17 +138,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   btnCamera: {
-    flexDirection: 'row',
     justifyContent: 'center',
   },
   cameraIcon: {
     position: 'relative',
-    right: 50,
+    right: 100,
+    bottom: 35,
     alignSelf: 'flex-end',
     elevation: 2
   },
   picture: {
+    alignSelf: 'center',
     elevation: 1,
+    backgroundColor: '#fff'
   },
   input: {
     height: 50,
