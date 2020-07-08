@@ -106,22 +106,8 @@ module.exports = {
   },
   async update(req, res) {
     try {
-      const { tattoos, ...data } = req.body;
-
       const sessao = await Sessao.findByPk(req.params.id);
-      sessao.update(data)
-      for (let i = 0; i < tattoos.length; i++) {
-
-        sessao.addTattoos(tattoos[i], {
-          through: {
-            descricao: tattoos[i].descricao,
-            tamanho: tattoos[i].tamanho,
-            desconto: tattoos[i].desconto,
-            acrescimo: tattoos[i].acrescimo,
-            valor: tattoos[i].valor
-          }
-        })
-      }
+      sessao.update(req.body)
       return res.status(200).json(sessao);
     } catch (err) {
       console.log(err)

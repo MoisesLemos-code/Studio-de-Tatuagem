@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   picture: {
-    margin: 10
+    margin: 10,
+    backgroundColor: '#FFF'
   },
   nomeData: {
     fontSize: 24,

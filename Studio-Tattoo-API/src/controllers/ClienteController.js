@@ -35,7 +35,6 @@ module.exports = {
         ['id', 'DESC']
       ]
     });
-
     return res.json(obj)
   },
   async update(req, res) {

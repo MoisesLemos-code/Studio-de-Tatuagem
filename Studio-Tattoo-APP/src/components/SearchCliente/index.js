@@ -160,13 +160,13 @@ export default class SearchCliente extends Component {
             </View>
             <View style={styles.bodyButtons}>
               <TouchableOpacity
-                style={styles.btn}
+                style={styles.btnSelecionar}
                 onPress={this.selecionarCliente}
                 underlayColor='#fff'>
                 <Text style={styles.btnText}>Selecionar</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={styles.btn}
+                style={styles.btnCancelar}
                 onPress={() => this.props.hideModal()}
                 underlayColor='#fff'>
                 <Text style={styles.btnText}>Cancelar</Text>
@@ -188,6 +188,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
   },
   picture: {
+    backgroundColor: '#fff',
     position: 'relative',
     top: 50,
     elevation: 5,
@@ -244,13 +245,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
   },
-  btn: {
+  btnSelecionar: {
     marginHorizontal: 10,
     marginTop: 10,
     padding: 10,
     width: '40%',
     elevation: 2,
     backgroundColor: '#1E2125',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#fff'
+  },
+  btnCancelar: {
+    marginHorizontal: 10,
+    marginTop: 10,
+    padding: 10,
+    width: '40%',
+    elevation: 2,
+    backgroundColor: '#B2B5BA',
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#fff'
@@ -278,6 +290,7 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   listPicture: {
+    backgroundColor: '#fff',
     margin: 5
   },
   itemListBody: {

@@ -8,21 +8,21 @@ import avatarImg from './../../img/avatar.png'
 
 import { FontAwesome } from '@expo/vector-icons'
 
-import SearchCliente from './searchCliente'
+import SearchCliente from '../../components/SearchCliente'
 import ListaTattoos from './listaTattoos'
 
 import api from "../../services/api"
 
 
-export default function SessaoCadastro() {
+export default function SessaoCadastro(props) {
+  const [modo, setModo] = useState('Iniciar Sessão')
   const [sessao, setSessao] = useState({
-    id: 8,
+    id: 0,
     status: '',
     total_acrescimo: 0.0,
     total_desconto: 0.0,
     total_liquido: 0.0,
     cliente_id: 0.0,
-    modo: 'iniciar'
   });
   const [list, setLista] = useState({
     data: [],
@@ -38,6 +38,18 @@ export default function SessaoCadastro() {
     email: '---',
   })
   const [modal, setModal] = useState(false)
+
+  useEffect(() => {
+    if (props.status !== undefined) {
+      if (props.status === 'Aberta') {
+        setModo('Iniciar Sessão')
+      } else if (props.status === 'Fechada') {
+        setModo('Reabrir Sessão')
+      } else {
+        setModo('?')
+      }
+    }
+  });
 
   header = () => {
     return (
@@ -74,13 +86,7 @@ export default function SessaoCadastro() {
           style={styles.btn}
           // onPress={() => salvarSessao()}
           underlayColor='#fff'>
-          <Text style={styles.btnText}>{(
-            sessao.modo === 'iniciar'
-              ? 'Iniciar Sessão'
-              : (sessao.modo === 'encerrar' ?
-                'Encerrar Sessão'
-                : 'Reabrir Sessão')
-          )}</Text>
+          <Text style={styles.btnText}>{modo}</Text>
         </TouchableOpacity>
       </View>
     )

@@ -12,10 +12,12 @@ import api from "../../services/api"
 export default class ModalCard extends Component {
 
   state = {
-    nome: this.props.item.nome,
-    endereco: this.props.item.endereco,
-    email: this.props.item.email,
-    id: this.props.item.id,
+    sessao_id: this.props.sessaoID,
+    descricao: "",
+    tamanho: 0.0,
+    desconto: 0.0,
+    acrescimo: 0.0,
+    valor: 0.0
   }
 
   constructor(props) {
@@ -24,10 +26,12 @@ export default class ModalCard extends Component {
 
   componentDidMount() {
     this.setState({
-      nome: this.props.item.nome,
-      endereco: this.props.item.endereco,
-      email: this.props.item.email,
-      id: this.props.item.id,
+      sessao_id: this.props.sessaoID,
+      descricao: "",
+      tamanho: 0.0,
+      desconto: 0.0,
+      acrescimo: 0.0,
+      valor: 0.0
     })
   }
 
@@ -68,7 +72,7 @@ export default class ModalCard extends Component {
     }
   }
 
-  excluirCliente = async () => {
+  excluirCliente = () => {
     try {
       Alert.alert(
         'Atenção!',
@@ -156,13 +160,13 @@ export default class ModalCard extends Component {
             />
             <View style={styles.bodyButtons}>
               <TouchableOpacity
-                style={styles.btn}
+                style={styles.btnSalvar}
                 onPress={this.editarCliente}
                 underlayColor='#fff'>
                 <Text style={styles.btnText}>Salvar</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={styles.btn}
+                style={styles.btnExcluir}
                 onPress={this.excluirCliente}
                 underlayColor='#fff'>
                 <Text style={styles.btnText}>Excluir</Text>
@@ -225,13 +229,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
   },
-  btn: {
+  btnSalvar: {
     marginHorizontal: 10,
     marginTop: 10,
     padding: 10,
     width: '30%',
     elevation: 2,
     backgroundColor: '#1E2125',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#fff'
+  },
+  btnExcluir: {
+    marginHorizontal: 10,
+    marginTop: 10,
+    padding: 10,
+    width: '30%',
+    elevation: 2,
+    backgroundColor: '#FF5566',
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#fff'

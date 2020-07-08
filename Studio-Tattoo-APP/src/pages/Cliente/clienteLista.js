@@ -83,7 +83,7 @@ export default class Cliente extends Component {
         <FlatList
           contentContainerStyle={styles.listView}
           data={this.state.list}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => item.id.toString()}
           renderItem={
             ({ item }) => <CardCliente
               item={item}
@@ -107,7 +107,4 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 5
   },
-  listView: {
-    alignItems: 'center'
-  }
 });

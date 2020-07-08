@@ -67,7 +67,7 @@ export default class ListSessao extends Component {
         <FlatList
           contentContainerStyle={styles.listView}
           data={this.state.list}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => item.id.toString()}
           renderItem={
             ({ item }) => <CardSessao
               item={item}

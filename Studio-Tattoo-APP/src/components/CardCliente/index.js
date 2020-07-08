@@ -7,14 +7,17 @@ import {
 } from 'react-native'
 import { Avatar } from 'react-native-paper';
 import avatarImg from './../../img/avatar.png'
+import api from "../../services/api"
 
-import ModalCard from './modalCard'
+import ModalCard from '../ModalCliente'
 
 export default class CardCliente extends Component {
 
   state = {
     modalVisible: false,
-    item: {}
+    item: {},
+    imagem: '',
+    imagemStatus: false
   };
 
   constructor(props) {
@@ -24,9 +27,42 @@ export default class CardCliente extends Component {
   componentDidMount() {
     this.setState({
       modalVisible: false,
-      item: this.props.item
+      item: this.props.item,
+      imagem: '',
+      imagemStatus: false
     })
+    this.setImage();
   }
+
+  setImage = async () => {
+    try {
+      const res = await api.get(`/clientefoto/${this.props.item.id}/show`);
+      if (res) {
+        this.setState({
+          ...this.state,
+          imagem: res.data.url,
+          imagemStatus: true
+        })
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  copyCanvas(img) {
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+  }
+
+  loadImage() {
+    var img = new Image();
+    img.onload = function () {
+      this.copyCanvas(img);
+    };
+    console.log('teste imagem card');
+    return img.src = this.state.imagem
+  }
+
 
   showModal = () => {
     this.setState({ ...this.state, modalVisible: true })
@@ -51,10 +87,10 @@ export default class CardCliente extends Component {
         <ModalCard
           modalHandle={this.state.modalVisible}
           hideModal={() => this.setState({ ...this.state, modalVisible: false })}
-          item={this.state.item}
+          item={this.props.item}
           updateItem={this.updateItem}
           deleteItem={this.deleteItem} />
-        <Avatar.Image source={avatarImg} size={70} style={styles.picture} />
+        <Avatar.Image source={(this.state.imagemStatus ? this.state.imagem : avatarImg)} size={70} style={styles.picture} />
         <View style={styles.containerBody}>
           <Text style={styles.textHead}>Nome</Text>
           <Text style={styles.textInfo}>{this.state.item.nome}</Text>
@@ -71,6 +107,7 @@ export default class CardCliente extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    alignSelf: 'center',
     borderRadius: 10,
     backgroundColor: '#1E2125',
     padding: 0,
@@ -81,7 +118,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   picture: {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    backgroundColor: '#FFF'
   },
   textHead: {
     color: '#D4D7DB'
